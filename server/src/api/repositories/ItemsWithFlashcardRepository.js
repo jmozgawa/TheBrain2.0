@@ -1,6 +1,6 @@
 // @flow
 import _ from 'lodash'
-import { Collection, ObjectId } from 'mongodb'
+import { Collection } from 'mongodb'
 import moment from 'moment'
 import { MongoRepository } from './MongoRepository'
 import getItemsWithFlashcardsByCount from '../tools/getItemsWithFlashcardsByCount'
@@ -16,7 +16,7 @@ class ItemsWithFlashcardRepository extends MongoRepository {
 
   async getItemsWithFlashcard (userId: string, userDetails: Object) {
     let currentItemsQuery = {
-      userId: new ObjectId(userId),
+      userId,
       courseId: userDetails.selectedCourse,
       $or: [
         { actualTimesRepeated: 0 },
@@ -29,19 +29,19 @@ class ItemsWithFlashcardRepository extends MongoRepository {
     }
     // currently changed to fetching only one current item, after testing and approving, code below should be refactored
     const currentItems = await this.itemsCollection.find(currentItemsQuery, {limit: 1, sort: {lastRepetition: 1} }).toArray()
-    const flashcards = await this.flashcardsCollection.find({_id: {$in: currentItems.map(item =>  new ObjectId(item.flashcardId))}}).toArray()
+    const flashcards = await this.flashcardsCollection.find({_id: {$in: currentItems.map(item =>  item.flashcardId)}}).toArray()
 
     return currentItems.map(item => {
       return {
         item,
-        flashcard: flashcards.find(flashcard => flashcard._id.equals(item.flashcardId))
+        flashcard: flashcards.find(flashcard => flashcard._id === item.flashcardId)
       }
     })
   }
 
   async getSessionCount (userId: string, userDetails: Object) {
     let currentItemsQuery = {
-      userId: new ObjectId(userId),
+      userId,
       courseId: userDetails.selectedCourse,
       $or: [
         { actualTimesRepeated: 0 },

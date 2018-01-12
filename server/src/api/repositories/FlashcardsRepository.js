@@ -1,6 +1,6 @@
 // @flow
 import { MongoRepository } from './MongoRepository'
-import { Collection, ObjectId } from 'mongodb'
+import { Collection } from 'mongodb'
 
 class FlashcardsRepository extends MongoRepository {
   flashcardsCollection: Collection
@@ -14,9 +14,8 @@ class FlashcardsRepository extends MongoRepository {
     return flashcards
   }
 
-  async getFlashcardsByIds (ids: [Object]) {
-    const objIds = ids.map(function (item){ return ObjectId(item)});
-    const flashcardsQuery = {_id: { $in: objIds}}
+  async getFlashcardsByIds (ids: [String]) {
+    const flashcardsQuery = {_id: { $in: ids}}
     const flashcards = await this.flashcardsCollection.find(flashcardsQuery)
     return flashcards.toArray()
   }

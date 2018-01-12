@@ -17,17 +17,18 @@ class ItemsRepository extends MongoRepository {
   }
 
   async update (id: string, item: Object, userId: string) {
-    return this.itemsCollection.update({_id: new ObjectId(id), userId: new ObjectId(userId)}, {$set: item})
+    return this.itemsCollection.update({_id: id, userId}, {$set: item})
   }
 
   async getItemById (_id: string, userId: string) {
-    return this.itemsCollection.findOne({_id: new ObjectId(_id), userId: new ObjectId(userId)})
+    return this.itemsCollection.findOne({_id, userId})
   }
 
   async create (flashcardId: string, userId: string, courseId: string, isCasual: Boolean) {
     const newItem = {
+      _id: (new ObjectId()).toString(),
       flashcardId,
-      userId: new ObjectId(userId),
+      userId,
       courseId,
       actualTimesRepeated: 0,
       easinessFactor: 2.5,
@@ -45,7 +46,7 @@ class ItemsRepository extends MongoRepository {
   async getReviews (userId: string, isCasual: Boolean) {
     const currentDayTimestamp = moment().utc().startOf('day').unix()
     let itemsQuery = {
-      userId: new ObjectId(userId),
+      userId,
       nextRepetition: { $gte: currentDayTimestamp },
     }
     if(isCasual) {
@@ -66,7 +67,7 @@ class ItemsRepository extends MongoRepository {
   }
 
   async clearNotCasualItems (userId: string) {
-    return await this.itemsCollection.removeMany({userId: new ObjectId(userId), isCasual: false})
+    return await this.itemsCollection.removeMany({userId, isCasual: false})
   }
 }
 

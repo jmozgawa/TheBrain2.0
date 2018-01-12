@@ -1,5 +1,5 @@
 // @flow
-import { Collection, ObjectId } from 'mongodb'
+import { Collection } from 'mongodb'
 import { MongoRepository } from './MongoRepository'
 
 class CoursesRepository extends MongoRepository {
@@ -14,7 +14,7 @@ class CoursesRepository extends MongoRepository {
   }
 
   async getCourse (_id: string) {
-    return this.coursesCollection.findOne({_id: new ObjectId(_id)})
+    return this.coursesCollection.findOne({_id})
   }
 }
 
