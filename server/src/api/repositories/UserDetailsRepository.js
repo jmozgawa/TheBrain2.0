@@ -33,11 +33,11 @@ class UserDetailsRepository extends MongoRepository {
   }
 
   async getById (userId: string) {
-    return this.userDetailsCollection.findOne({userId: new ObjectId(userId)})
+    return this.userDetailsCollection.findOne({userId})
   }
 
   async getNextLessonPosition (courseId: string, userId: string) {
-    const userDetails = await this.userDetailsCollection.findOne({userId: new ObjectId(userId)})
+    const userDetails = await this.userDetailsCollection.findOne({userId})
     const course = _.find(userDetails.progress, doc => doc.courseId === courseId)
 
     if (!course) {
