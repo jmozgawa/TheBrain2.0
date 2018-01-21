@@ -1,1 +1,0 @@
-git remote add heroku-web https://git.heroku.com/stark-badlands-16845.git
