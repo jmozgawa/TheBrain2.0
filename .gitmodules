@@ -1,0 +1,12 @@
+[submodule "shared"]
+	path = shared
+	url = https://github.com/jmozgawa/TheBrain-Shared.git
+[submodule "mobileClient"]
+	path = mobileClient
+	url = https://github.com/jmozgawa/TheBrain-MobileClient.git
+[submodule "client"]
+	path = client
+	url = https://github.com/jmozgawa/TheBrain-Client.git
+[submodule "server"]
+	path = server
+	url = https://github.com/jmozgawa/TheBrain-Server.git
